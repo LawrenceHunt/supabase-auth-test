@@ -7,7 +7,11 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    NODE_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z
+      .enum(["development", "test", "production"])
+      .default("development"),
+    SUPABASE_DB_URL: z.string().url(),
+    SUPABASE_SERVICE_ROLE_KEY: z.string(),
   },
 
   /**
@@ -17,6 +21,12 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+
+    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
+
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string(),
+    NEXT_PUBLIC_GOOGLE_SECRET: z.string(),
   },
 
   /**
@@ -24,6 +34,14 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    SUPABASE_DB_URL: process.env.SUPABASE_DB_URL,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_GOOGLE_SECRET: process.env.NEXT_PUBLIC_GOOGLE_SECRET,
+
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
@@ -33,8 +51,8 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   /**
-   * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
-   * `SOME_VAR=''` will throw an error.
+   * Makes it so that empty strings are treated as undefined.
+   * `SOME_VAR: z.string()` and `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,
 });
