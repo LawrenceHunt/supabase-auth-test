@@ -18,6 +18,11 @@ function useUser() {
       if (user) {
         return;
       }
+
+      if (!session?.user) {
+        setUser(null);
+      }
+
       const parsedUser = session?.user
         ? getUserFromSupabaseUser(session.user)
         : null;
@@ -55,7 +60,7 @@ const signin = async () => {
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      // redirectTo: `http://localhost:3000/auth/callback`,
     },
   });
 };
@@ -76,7 +81,9 @@ export function ClientSideHeader() {
 
   const router = useRouter();
 
-  const onSuccess = () => router.refresh();
+  const onSuccess = () => {
+    router.refresh();
+  };
 
   return (
     <div className="flex items-center gap-4 border-2 border-blue-400 p-4">

@@ -12,8 +12,6 @@ const signout = async () => {
   const supabase = await getServerClient();
   await supabase.auth.signOut();
 
-  console.log("redirecting after signout");
-
   redirect("/");
 };
 
@@ -71,7 +69,9 @@ export async function ServerSideHeader() {
   return (
     <div className="flex items-center gap-4 border border-red-600 p-4">
       <h1 className="text-red-600">Server side</h1>
+
       <SigninButton />
+
       <SignoutButton />
 
       <UserName user={parsedUser} />
